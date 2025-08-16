@@ -1,0 +1,19 @@
+What i have remember till now from this project
+----------------------------------------------------------------
+
+1. i have implemented the mvc(model view controller) module to coplete the project
+2. creare  a folder named with the comapny named
+3. run > npm init -y (for the nodejs server setup)
+4. inatall express , mongoose, 
+5. create folder model, view, controller
+6. create the file index.js
+7. require express and setup server
+8. app.use(express.json())
+9. app.use(express.urlencoded())
+10. setup mongoose database
+11. setup model
+12. import model and setup controller()
+13. import controller and setup api(index.js)
+14. connect the backed with fronted using cors and axios
+15. i forgot everything
+16. make view file static  app.use(express.static("view"))

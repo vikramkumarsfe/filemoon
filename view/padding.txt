@@ -1,0 +1,52 @@
+
+
+padding
+-------------------------------------------
+p-
+pl-
+pr-
+pt-
+pb-
+
+margin
+---------------------
+m-
+
+width
+-----------------------
+w-
+
+height
+----------------------------
+h-
+
+font size
+-------------------
+text
+
+font-weigght
+-------------------
+font-bold
+font-semibold
+
+
+More Essential
+------------------------
+w-full
+w-6/12
+w-fit
+h-full
+h-screen
+h-min-screen
+flex
+justify-between
+justify-center
+item-center
+
+
+multipart/form-data(for sharing or uploading)
+------------------------------------------------------
+const form = e.target
+const formData = new Formdat(form)
+
+axios.post('http://127.0.0.1/file', formData)

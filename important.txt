@@ -1,0 +1,44 @@
+multipart/form-data
+
+image
+image/jpeg
+
+video
+video/mp4
+
+Middleware
+-------------------------------------
+App Level
+Route Level
+
+Generate Random jwt token 
+--------------------------------------------------------------------
+>node
+>require("crypto").randomBytes(32).toString('hex')
+
+
+Mial servers
+------------------------------------------------------
+monthly 10,000 email monthly -> nodemailer
+
+10,000- 50,000
+    sendgrid
+    mailchimp
+    msg91
+
+50,000  ->
+    AWS SES
+    ( pvt.ltd, llc)
+
+
+
+-----------------------------------------
+Api request -> payload
+-> body = (ordinary) {
+    email : 'abcd'
+    password : 'sdfsf}
+-> header (secure)
+    token
+    api key
+    password
+    secret_key

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+     <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+        rel="stylesheet"
+    />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="bg-gray-100 h-screen ">
+        <aside class="space-y-6 overflow-hidden bg-linear-to-r from-cyan-500 to-blue-500 fixed top-0 left-0 h-full" id="sidebar" style="width: 250px; transition: 0.3s;">
+            <div class="flex flex-col justify-center items-center mt-8">
+                <img src="../images/avatar.png" width="80px"/>
+                <h1 class="text-lg font-semibold text-white" id="fullname"></h1>
+                <p class="text-gray-100 text-sm" id="email"></p>
+            </div>
+
+            <div class="px-6 text-white flex flex-col gap-2 ">
+                <a href="/dashboard">
+                    <button class=" w-full bg-rose-400 text-white py-2 rounded hover:bg-rose-600">
+                        <i class="ri-apps-line"></i>
+                        <label> Dashboard </label>
+                    </button>
+                </a>
+
+                <a href="/files">
+                    <button class=" w-full bg-rose-400 text-white py-2 rounded hover:bg-rose-600">
+                        <i class="ri-file-line"></i>
+                        <label> My Files </label>
+                    </button>
+                </a>
+
+                <a href="/history">
+                    <button class=" w-full bg-rose-400 text-white py-2 rounded hover:bg-rose-600">
+                        <i class="ri-history-line"></i>
+                        <label> History </label>
+                    </button>
+                </a>
+
+                    <button class=" w-full bg-rose-400 text-white py-2 rounded hover:bg-rose-600" onclick="logout()">
+                        <i class="ri-logout-circle-r-line"></i>
+                        <label> Logout </label>
+                    </button>
+            </div>
+        </aside>
+
+        <section class="" id="section" style="margin-left: 250px; transition: 0.3s;">
+            <nav class="bg-white px-6 py-4 w-full shadow-lg flex justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="ri-contrast-2-fill text-3xl text-violet-700"></i>
+                    <h1 class="text-xl font-semibold text-violet-500">Filemoon</h1>
+                </div>
+
+                <div>
+                    <button onclick="toggleSidebar()" class="bg-gray-100 px-3  py-2 rounded hover:bg-gray-200">
+                        <i class="ri-menu-2-line text-lg"></i>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="p-6 space-y-6 ">
+                <div class="flex justify-between items-center">
+                    <h1 class="tex-5xl font-semibold"> My Files </h1>
+                    <button class=" flex bg-[#00AEE4] rounded py-2 px-8 text-white font-semibold gap-1" onclick="toggleDrawer()">
+                        Add Files
+                    </button>
+                </div>
+
+                <div>
+                    <table class="w-full">
+                        <thead>
+                            <tr class=" bg-slate-900 text-white text-left">
+                                <th class=" font-medium py-4 pl-6"> Filename </th>
+                                <th class=" font-medium"> Type </th>
+                                <th class=" font-medium"> Size </th>
+                                <th class=" font-medium"> created </th>
+                                <th class="font-medium"> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody  id="files-table">
+
+                        </tbody>
+                            
+                    </table>
+                </div>
+            </div>
+
+            <div class="w-4/12 top-0 min-h-screen fixed bg-white p-6 space-y-2 " id="drawer" style="right: -33.33%; transition: 0.2s;">
+                <div class=" flex justify-between items-center">
+                    <h1 class="px-8 py-2 text-lg font-semibold ">
+                        Add a new file
+                    </h1>
+                    <button onclick="toggleDrawer()">
+                        <i class="ri-close-line font-semibold "></i>
+                    </button>
+                </div>
+                <div class="border-b border-gray-200 -mx-6"></div>
+
+                <form class="space-y-3" onsubmit="uploadFile(event)">
+                    <div class="flex flex-col gap-2 ">
+                        <label> File Name: </label>
+                        <input 
+                        name = 'filename'
+                        class="p-3 border border-gray-300 rounded "
+                        placeholder="example"
+                        required
+                        type="text"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2 ">
+                        <label> select File: </label>
+                        <input 
+                        name = 'file'
+                        class="p-3 border border-gray-300 rounded "
+                        placeholder="choose your file"
+                        required
+                        type="file"
+                        />
+                    </div>
+
+                    <button class="bg-violet-500 px-8 py-3 rounded flex gap-2 " id="uploadButton">
+                        <h1 class="text-white font-semibold text-lg"> Upload </h1>
+                    </button>
+                </form>
+                <div class="bg-gray-200 h-4 w-full mt-6  mx-auto rounded-md">
+                    <div class="h-full bg-green-500 rounded-md" id="progress" style="width: 0%;">
+                        <p class="text-center text-[12px] text-white m-0 p-0" id="percent"></p>
+                    </div>
+                </div>
+            </div>
+
+            
+        </section>
+    </div>
+    <script src="../js/env.js"></script>
+    <script src="../js/layout.js"></script>
+    <script src="../js/session.js"> </script>
+    <script src="../js/drawer.js"></script>
+</body>
+</html>
