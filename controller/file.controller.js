@@ -17,7 +17,7 @@ const getMimeType = (mime) =>{
     if (mime.startsWith("video/")) return "video"
     if (mime.startsWith("css/")) return "css"
     if (mime.startsWith("javascript/")) return "javascript"
-    return row
+    return "raw"
 }
 
 const createFile = async (req,res) =>{
@@ -123,4 +123,5 @@ module.exports = {
     fetchFiles,
     deleteFiles,
     downloadFile
+
 }
