@@ -13,6 +13,7 @@ const getToken = () =>{
         return options
 }
 
+
 const toast = new Notyf({ position : { x: 'center', y: 'top' }})
 
 const toggleDrawer = () => {
@@ -127,7 +128,7 @@ const deleteFile = async (id, button) =>{
     {
         button.innerHTML = '<i class="ri-loader-2-line"></i>'
         button.disabled = true
-        const { data: file } = await axios.delete(`/api/file/${id}`)
+        const { data : file } = await axios.delete(`/api/file/${id}`)
         toast.success(`${file.filename} deleted successfully!`)
         setTimeout(()=>{
             fetchFile()
@@ -136,7 +137,7 @@ const deleteFile = async (id, button) =>{
     }
     catch(err)
     {
-        toast.error(`File not deleted!`)
+        toast.error(err.response ? err.response.data.message : err.message)
         console.error(err)
     }
     finally {

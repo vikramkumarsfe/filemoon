@@ -27,6 +27,10 @@ const FileSchema = new Schema({
     size : {
         type : Number,
         required : true
+    },
+    public_id :{
+        type : String,
+
     }
 }, { timestamps : true})
 

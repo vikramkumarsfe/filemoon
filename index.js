@@ -4,26 +4,38 @@ dotenv.config()
 const mongoose = require("mongoose")
 mongoose.connect(process.env.DB)
 
+
+.then(()=>{console.log("success")})
+
+.catch((err)=>{console.log(err.message)})
+
 const express = require("express")
+const cloudinary = require("cloudinary").v2;
 const { v4: uniqueId } = require("uuid")
 const path = require("path")
 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 const multer = require("multer")
-const storage = multer.diskStorage({
-    destination : (req, file, next)=>{
-        next(null, 'files/')
-    },
-    filename : (req, file, next)=>{
-        const nameArr = file.originalname.split(".")
-        const extn = nameArr.pop()
-        const name = `${uniqueId()}.${extn}`
-        next(null,name)
-    }
-})
+// const storage = multer.diskStorage({
+//     destination : (req, file, next)=>{
+//         next(null, 'files/')
+//     },
+//     filename : (req, file, next)=>{
+//         const nameArr = file.originalname.split(".")
+//         const extn = nameArr.pop()
+//         const name = `${uniqueId()}.${extn}`
+//         next(null,name)
+//     }
+// })
 const upload = multer({
-    storage : storage,
+    storage : multer.memoryStorage(),
     limits : {
-        filesize : 200 * 1000 * 1000
+        filesize : 10 * 1000 * 1000
     }
 })
 

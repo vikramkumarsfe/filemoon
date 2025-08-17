@@ -1,3 +1,4 @@
+const cloudinary = require("cloudinary").v2
 const FileModel = require('../model/file.model')
 const fs = require("fs")
 const path = require("path")
@@ -11,14 +12,34 @@ const getType = (type) =>{
     return type
 }
 
+const getMimeType = (mime) =>{
+    if (mime.startsWith("image/")) return "image"
+    if (mime.startsWith("video/")) return "video"
+    if (mime.startsWith("css/")) return "css"
+    if (mime.startsWith("javascript/")) return "javascript"
+    return row
+}
+
 const createFile = async (req,res) =>{
     try
     {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded" });
+        }
+
+        const b64 = Buffer.from(req.file.buffer).toString("base64");
+        const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+
+        // Upload to Cloudinary
+        const result = await cloudinary.uploader.upload(dataURI, {
+            folder: "skillswap",      // optional folder
+            resource_type: "auto"     // allows pdf, images, videos, etc.
+        });
         const file = req.file
-        const { filename } = req.body
         const payload = {
-            path : (file.destination + file.filename),
-            filename : filename,
+            path : result.secure_url,
+            public_id: result.public_id, // so you can delete later if needed
+            filename: req.body.filename || req.file.originalname,
             type: getType(file.mimetype),
             size: file.size,
             user : req.user.id,
@@ -50,14 +71,20 @@ const deleteFiles = async (req, res) =>{
     try 
     {
         const {  id } = req.params
-        const file = await FileModel.findByIdAndDelete(id)
+        const file = await FileModel.findById(id)
 
 
         if(!file)
             return res.status(500).json({ message : "file not found!!"})
 
-        fs.unlinkSync(file.path)
-        res.status(200).json(file)
+        if (file.public_id) {
+            const resourceType = getMimeType(file.type);
+            await cloudinary.uploader.destroy(file.public_id, { resource_type: resourceType})
+        }
+
+        const deletedFile = await FileModel.findByIdAndDelete(id);
+
+        res.status(200).json(deletedFile);
     }
     catch (err) 
     {
@@ -74,15 +101,16 @@ const downloadFile = async (req, res) => {
         if(!file)
             return res.status(500).json({message: " file not found!"})
 
-        const root = process.cwd()
-        const filePath = path.join(root, file.path)
+        // const filePath = file.path
 
-        res.setHeader('Content-Disposition',`attachment; filename="${file.filename}.${extn}"` );
+        // res.setHeader('Content-Disposition',`attachment; filename="${file.filename}.${extn}"` );
 
-        res.sendFile(filePath , (err)=>{
-            if(err)
-                throw new Error("Failed to download the file")
-        })
+        // res.sendFile(filePath , (err)=>{
+        //     if(err)
+        //         throw new Error("Failed to download the file")
+        // })
+
+        return res.redirect(file.path); 
     }
     catch(err)
     {

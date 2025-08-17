@@ -1,1 +1,1 @@
-const SERVER = "https://filemoon-1.onrender.com"
+const SERVER = "http://localhost:8080"
