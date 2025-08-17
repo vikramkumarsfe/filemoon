@@ -56,10 +56,12 @@ const fetchRecentShares = async () =>{
     try 
     {
         const { data } = await axios.get('/api/share?limit=3', getToken())
+        console.log(data)
         const recentShare = document.getElementById('recent-shared-file')
 
         for( let item of data )
         {
+            // console.log(item)
             const ui = `
             <div class="flex justify-between items-center">
                 <div>

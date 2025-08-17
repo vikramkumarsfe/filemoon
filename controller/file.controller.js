@@ -32,7 +32,7 @@ const createFile = async (req,res) =>{
 
         // Upload to Cloudinary
         const result = await cloudinary.uploader.upload(dataURI, {
-            folder: "skillswap",      // optional folder
+            folder: "filemoon",      // optional folder
             resource_type: "auto"     // allows pdf, images, videos, etc.
         });
         const file = req.file

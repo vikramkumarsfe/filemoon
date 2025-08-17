@@ -161,6 +161,8 @@ const fetchShared = async(req, res) =>{
         const history = await ShareModel.find({user : req.user.id})
         //.populate('user', 'fullname email mobile', '-_id')
         .populate('file', 'filename size').sort({createdAt : -1}).limit(limit)
+
+        console.log(history)
         res.status(200).json(history)
     }
     catch(err)
